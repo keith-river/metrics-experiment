@@ -9,11 +9,12 @@ Experiment of Software Metrics
 
 - **「書く → 整形 → リント → テスト → 修正 → カバレッジ」**という点検の流れを、実際のコマンドと出力で体験する。
 
-- 説明の都合上、料理番組形式＝あらかじめ仕込んでおいた材料を、テンポよく提示するために、git を使っている。
+- ★⇒　説明の都合上、**料理番組形式＝あらかじめ仕込んでおいた材料を、テンポよく提示するために、git**を使用する
 - git の詳しい説明はしない。
-- 作業の区切りごとに `git commit` して、ツールが変えた部分を **`git diff` の before/after** で確認する癖をつける。
-- 使うのは `init`、`switch -c`、`add`、`commit`、`diff`、`log` だけで、**ステップごとにブランチを切って**、各段階の成果物をリポジトリに残す。
+- 作業の区切りごとに `git commit` して、ツールが変えた部分を **`git diff` の before/after** で確認する
+- 使うのは `init`、`switch -c`、`add`、`commit`、`diff`、`log` だけで、**ステップごとにブランチを切って**、各段階の成果物をリポジトリに残す
 
+-----
 
 ## 1. 全体の流れと時間配分
 
@@ -32,16 +33,14 @@ Experiment of Software Metrics
 合計で約20分。
 各ステップの最後にコミットし、次のステップの最初に `git switch -c` で新しいブランチを切る。**つまずいたら、そのステップのブランチ名を `git switch` すれば、正解の状態に戻れる**（「5. 困ったとき」を参照）。
 
+-----
 
 ## 2. 事前準備（配布物と環境）
 
 ```
-mkdir work
-cd work
 git clone https://github.com/keith-river/metrics-experiment.git
 unzip se-handson-kit.zip
 cd se-handson-kit
-
 ```
 
 
@@ -68,7 +67,9 @@ git config --global user.email "you@example.com"
   **Mac での注意**：標準の `gcc` は実体が Apple clang で、`gcov` が動かない。Homebrew で `brew install gcc lcov llvm clang-format` を入れると（`clang-tidy` は `llvm` に含まれる）、`env.sh` が `gcc-14` などを自動で選ぶ。`check-env.sh` が `OK カバレッジ計測` と出れば準備完了である。Homebrew の llvm は PATH に入らないので、`export PATH="$(brew --prefix llvm)/bin:$PATH"` を `~/.zshrc` に追加する。
 ```
 
-## 3. 台本@ 計算機室ＶＭ （Debian）
+-----
+
+## 3. シナリオ　@ 計算機室ＶＭ （Debian）
 
 以降のコマンドは、すべて作業ディレクトリ `~/se-handson` で行う。出力は、リハーサルで実際に出たものである（`clang-tidy` の版が違うと、件数や文言が少し変わる）。
 
@@ -94,6 +95,8 @@ $ git log --oneline
 
 `.clang-format` は、チームの規約（LLVM スタイル、インデント4、1行80桁）である。
 
+---
+
 ### ステップ1（2分）粗削り版を書く
 
 ★⇒ **最初のコードは、動くかどうかも分からない「粗削り」でよい。まずコンパイラの警告を見て、コミットする**
@@ -113,6 +116,8 @@ $ $CC -Wall -Wextra -c bubble_sort.c
 ```
 
 **警告は出ない。つまり、コンパイラを通ったことは正しさを保証しない**（後のステップで効いてくる）**
+
+--- 
 
 ### ステップ2（2.5分）フォーマッタ：clang-format
 
@@ -184,6 +189,8 @@ index b03668b..c97cd99 100644
 git add -A
 git commit -m "style: clang-format を適用（整形のみ）"
 ```
+
+---
 
 ### ステップ3（3.5分）リンタ：clang-tidy
 
@@ -295,6 +302,8 @@ git add -A
 git commit -m "refactor: clang-tidy の指摘に対応（命名・変数初期化）"
 ```
 
+---
+
 ### ステップ4（2.5分）テストを書く：ここで落ちる
 
 ★⇒ **テストは「期待値を先に決めて、実際の出力と比べる」プログラムである。まず最小の1ケース（昇順にそろった配列は、そのまま変わらない）を試す**
@@ -317,6 +326,8 @@ a.out: bubble_test.c:12: main: Assertion `memcmp(input1, expect1, sizeof(input1)
 git add -A
 git commit -m "test: 最初のテストを追加（失敗する）"
 ```
+
+---
 
 ### ステップ5（2分）修正する
 
@@ -367,6 +378,8 @@ test succeeded
 git add -A
 git commit -m "fix: 比較の向きを修正（降順→昇順）、NULL・短い配列を早期return"
 ```
+
+---
 
 ### ステップ6（4分）カバレッジ：テストが通っても安心できない
 
@@ -512,6 +525,8 @@ git commit -m "test: 分岐を網羅するテストを追加（行・分岐カ�
 
 注意点：**カバレッジ100%は、正しさの保証ではない**。実行されたかどうかしか見ていない（結果が正しいかは、テストの期待値次第）。これが、0週目以降の「ランダムテスト」へつながる。
 
+---
+
 ### まとめ（2分）
 
 ```
@@ -543,6 +558,7 @@ git diff step1-draft step3-lint     # 粗削り版 → リント反映版
 git diff step4-test step5-fix       # 修正の前後（バグ修正）
 git diff -w step1-draft step2-format
 ```
+---
 
 ### ステップ7（予備／各自）ランダムテストとベンチマーク
 
@@ -577,6 +593,9 @@ size,best_time
 
 データサイズが2倍になると、時間は約4倍になる（10000 → 20000 で約5倍）。$O(n^2)$ らしい振る舞いである。ベンチマークは $N = 100000$ まで測ると1分以上かかるので、ここでは $N \le 20000$ に絞ってある。測定値は環境で変わる。
 
+
+-----
+
 ## 4. 振り返り：今日の道具が見つけたこと
 
 |ステップ|道具|見つけたこと|見つけられなかったこと|
@@ -604,13 +623,5 @@ size,best_time
 - `error: The following untracked working tree files would be overwritten` などと出たら、`git status` で状態を確認して、不要なファイルは消す。
 
 
-
-## 6. 参考、オリジナルとの差分、確認
-
-- **粗削り版は降順に整列する。** 元のコードの `a[j - 1] < a[j]` は降順になる。ここでは「意図的なバグ」として、ステップ4でテストに見つけさせる題材に使った。意図していなかった場合は、ステップ1のコードを直したうえで、バグの題材を別に用意する必要がある。
-- **粗削り版は、`gcc -Wall -Wextra` で警告が出ない。** 元の資料にあった `unused variable 'tmp'` の警告は、別の題材（挿入ソート）のログの名残で、バブルソートの粗削り版では再現しない。そのため「コンパイラは通るが、バグはある」という説明に変えた。
-- **引数の順序を `(int n, int *arr)` に統一した。** 元のコードは `bubble_sort(int n, int *a)` なのに、ランダムテストとベンチマークでは `bubble_sort(int *arr, int n)` と呼んでいた。粗削り版に合わせて、テスト側を直した（元のテストで宣言が `unsigned int`、`#include <stdio.h>` が抜けていた点も直した）。
-- **`git checkout` は `git switch` にした。** 学生が混乱しにくく、ブランチを切る `git switch -c` と合わせて使える。
-- **ベンチマークの上限を $N=20000$ にした。** バブルソートは $N=100000$ だと1回が20秒前後かかり、繰り返しを含めると1分を超えるため。
 - **複雑さの表（元資料の 1.3(5)）は、ハンズオンには入れていない。** 20分に収まらないので、本編の実験で扱う想定である。
 - Mac 向けの手順（Homebrew、`env.sh`）は、Linux 上のリハーサルで動作を確かめたもので、**Mac 実機では未確認**である。事前に `check-env.sh` で確認してほしい。
