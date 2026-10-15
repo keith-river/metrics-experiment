@@ -39,7 +39,9 @@ Experiment of Software Metrics
 
 ```
 git clone https://github.com/keith-river/metrics-experiment.git
+cd metrics-experment
 unzip se-handson-kit.zip
+mv se-handson-kit ~/
 cd se-handson-kit
 ```
 
@@ -58,13 +60,19 @@ cd se-handson-kit
 事前に **各自で1回だけ** 次を実行してもらう：
 
 ```
-bash ~/se-handson-kit/check-env.sh
+. ./env.sh
+bash ./check-env.sh
 git config --global user.name  "あなたの名前"
 git config --global user.email "you@example.com"
+git config --list
 ```
+- 一度でもgit を使っていれば，リポジトリ毎に`git config --global user...`する必要なし
 
 ```
-  **Mac での注意**：標準の `gcc` は実体が Apple clang で、`gcov` が動かない。Homebrew で `brew install gcc lcov llvm clang-format` を入れると（`clang-tidy` は `llvm` に含まれる）、`env.sh` が `gcc-14` などを自動で選ぶ。`check-env.sh` が `OK カバレッジ計測` と出れば準備完了である。Homebrew の llvm は PATH に入らないので、`export PATH="$(brew --prefix llvm)/bin:$PATH"` を `~/.zshrc` に追加する。
+  **Mac での注意**：標準の `gcc` は実体が Apple clang で、`gcov` が動かない。
+   Homebrew で `brew install gcc lcov llvm clang-format` を入れると（`clang-tidy` は `llvm` に含まれる）、
+   `env.sh` が `gcc-14` などを自動で選ぶ。`check-env.sh` が `OK カバレッジ計測` と出れば準備完了。
+  Homebrew の llvm は PATH に入らないので、`export PATH="$(brew --prefix llvm)/bin:$PATH"` を `~/.zshrc` に追加する。
 ```
 
 -----
@@ -79,7 +87,6 @@ git config --global user.email "you@example.com"
 
 ```
 . ~/se-handson-kit/env.sh
-mkdir ~/se-handson && cd ~/se-handson
 git init -b main
 cp $KIT_DIR/step0/.clang-format $KIT_DIR/step0/.gitignore .
 git add -A
