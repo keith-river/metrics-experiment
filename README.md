@@ -40,7 +40,7 @@ git clone https://github.com/keith-river/metrics-experiment.git
 cd metrics-experment
 unzip se-handson-kit.zip
 mv se-handson-kit ~/
-cd se-handson-kit
+cd ~/se-handson-kit
 ```
 
 
